@@ -11,46 +11,43 @@ static const long double        INTERCEPT      = 2.76415178263481;
 static const long double        LEARNING_RATE  = 0.175000;
 static const long double        RAND_MAXF      = 32767.0L; // (long double) RAND_MAX
 
-static inline long double* __cdecl generate_x(_In_ register const size_t length) {
+static inline long double* generate_x(register const size_t length) {
     long double* array = malloc(length * sizeof(long double));
     if (!array) {
-        fwprintf_s(stderr, L"memory allocation failure @ line %d inside function %s\n", __LINE__, __FUNCTIONW__);
+        fprintf(stderr, "memory allocation failure @ line %d inside function %s\n", __LINE__, __FUNCTION__);
         return NULL;
     }
     for (size_t i = 0; i < length; ++i) array[i] = rand() / RAND_MAXF;
     return array;
 }
 
-static inline long double* __cdecl generate_y(
-    _In_count_(length) register const long double* const x,
-    _In_ register const size_t                           length,
-    _In_ register const long double                      a,
-    _In_ register const long double                      b
+static inline long double* generate_y(
+    register const long double* const x, register const size_t length, register const long double a, register const long double b
 ) {
     long double* array = malloc(length * sizeof(long double));
     if (!array) {
-        fwprintf_s(stderr, L"memory allocation failure @ line %d inside function %s\n", __LINE__, __FUNCTIONW__);
+        fprintf(stderr, "memory allocation failure @ line %d inside function %s\n", __LINE__, __FUNCTION__);
         return NULL;
     }
     for (size_t i = 0; i < length; ++i) array[i] = x[i] * a + b;
     return array;
 }
 
-static __forceinline long double __stdcall loss( // squared error / 2
-    _In_ register const long double x,
-    _In_ register const long double y,
-    _In_ register const long double a,
-    _In_ register const long double b
+static  long double  loss( // squared error / 2
+     register const long double x,
+     register const long double y,
+     register const long double a,
+     register const long double b
 ) {
     return powl(y - (a * x + b), 2.00L) / 2.0000L;
 }
 
-static inline long double __stdcall cost(
-    _In_count_(length) const long double* const x,
-    _In_count_(length) const long double* const y,
-    _In_ register const size_t                  length,
-    _In_ register const long double             a,
-    _In_ register const long double             b
+static inline long double cost(
+    const long double* const   x,
+    const long double* const   y,
+    register const size_t      length,
+    register const long double a,
+    register const long double b
 ) {
     // loss = (prediction - target) ^ 2 / 2
     // cost is averaged aggregate loss
@@ -67,12 +64,12 @@ typedef struct pair {
         long double value_1;
 } pair_t;
 
-static inline pair_t __stdcall deriv_cost(
-    _In_count_(length) register const long double* const x,
-    _In_count_(length) register const long double* const y,
-    _In_ register const size_t                           length,
-    _In_ register const long double                      a,
-    _In_ register const long double                      b
+static inline pair_t deriv_cost(
+    register const long double* const x,
+    register const long double* const y,
+    register const size_t             length,
+    register const long double        a,
+    register const long double        b
 ) {
     // derivative of the cost function with respect to the weight and bias (i.e. our prediction)
     long double dcost_w = 0.0000, dcost_b = 0.0000, dcost = 0.000;
@@ -86,7 +83,7 @@ static inline pair_t __stdcall deriv_cost(
     return (pair_t) { dcost_w / length, dcost_b / length }; // averaging
 }
 
-int wmain(void) {
+int main(void) {
     srand((unsigned) time(NULL));
 
     const long double* const predictor = generate_x(MAX_SIZE);
@@ -96,7 +93,7 @@ int wmain(void) {
 
     // boostrap a and b with two random values between 0.0 and 1.0
     long double learned_a = rand() / RAND_MAXF, learned_b = rand() / RAND_MAXF;
-    wprintf_s(L"bootstrapped a = %2.10Lf, b = %2.10Lf\n", learned_a, learned_b);
+    printf("bootstrapped a = %2.10Lf, b = %2.10Lf\n", learned_a, learned_b);
     pair_t derror = { 0.000, 0.000 };
 
     // gradient descent
@@ -110,8 +107,8 @@ int wmain(void) {
     free(predictor);
     free(target);
 
-    wprintf_s(L"actual       a = %2.10Lf, b = %2.10Lf\n", SLOPE, INTERCEPT);
-    wprintf_s(L"inferred     a = %2.10Lf, b = %2.10Lf\n", learned_a, learned_b);
+    printf("actual       a = %2.10Lf, b = %2.10Lf\n", SLOPE, INTERCEPT);
+    printf("inferred     a = %2.10Lf, b = %2.10Lf\n", learned_a, learned_b);
 
     return EXIT_SUCCESS;
 }

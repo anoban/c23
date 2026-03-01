@@ -1,11 +1,12 @@
 #include <limits.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
 
-void __forceinline __stdcall init_crc_table(_Inout_ uint32_t* restrict crc_table) {
-    for (uint32_t i = 0; i <= UCHAR_MAX; ++i) { // each byte in the table.
+static void init_crc_table(unsigned* restrict crc_table) {
+    for (unsigned i = 0; i <= UCHAR_MAX; ++i) { // each byte in the table.
         crc_table[i] = i;
-        for (uint32_t j = 0; j < 8; ++j) { // each bit position in a byte
+        for (unsigned j = 0; j < 8; ++j) { // each bit position in a byte
 
             // 0x1U is 0000 0000 0000 0000 0000 0000 0000 0001
             // if anything is to yield 0000 0000 0000 0000 0000 0000 0000 0000 with a bitwise and operation
@@ -18,7 +19,7 @@ void __forceinline __stdcall init_crc_table(_Inout_ uint32_t* restrict crc_table
             // any combination of bits in any sequence can give a non-zero value in this bitwise and operation
             // given that its last bit is not zero.
             // to satisfy this if condition, the value in the CRC table must have 0 as the last bit.
-            // any uint32_t satisfying this (xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxx0) criteria
+            // any unsigned satisfying this (xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxx0) criteria
             // will pass this conditional.
 
             if (!(crc_table[i] & 0x1)) crc_table[i] >>= 1;
@@ -46,7 +47,7 @@ void __forceinline __stdcall init_crc_table(_Inout_ uint32_t* restrict crc_table
 }
 
 int main(void) {
-    const uint32_t CRC_TABLE[] = {
+    static const unsigned CRC_TABLE[] = {
         0,          1996959894, 3993919788, 2567524794, 124634137,  1886057615, 3915621685, 2657392035, 249268274,  2044508324, 3772115230,
         2547177864, 162941995,  2125561021, 3887607047, 2428444049, 498536548,  1789927666, 4089016648, 2227061214, 450548861,  1843258603,
         4107580753, 2211677639, 325883990,  1684777152, 4251122042, 2321926636, 335633487,  1661365465, 4195302755, 2366115317, 997073096,
@@ -73,10 +74,10 @@ int main(void) {
         3272380065, 1510334235, 755167117
     };
 
-    uint32_t table[UCHAR_MAX + 1] = { 0 };
+    static unsigned table[UCHAR_MAX + 1] = { 0 };
     init_crc_table(table);
 
     // for (uint64_t i = 0; i <= UCHAR_MAX; ++i) printf_s("%4llu) %s\n", i, table[i] == CRC_TABLE[i] ? "okay" : "whoops");
-    for (uint64_t i = 0; i <= UCHAR_MAX; ++i) wprintf_s(L"0x%08X,\n", table[i]);
-    return 0;
+    for (uint64_t i = 0; i <= UCHAR_MAX; ++i) printf("0x%08X,\n", table[i]);
+    return EXIT_SUCCESS;
 }
