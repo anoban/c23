@@ -128,7 +128,7 @@ static inline BITMAPINFOHEADER parse_infoheader(const unsigned char* const restr
         .biClrImportant  = 0,
     };
     if (*((unsigned*) (imstream + 14U)) > 40) {
-        fputws(L"BMP image seems to contain an unparsable file info header", stderr);
+        fputs("BMP image seems to contain an unparsable file info header", stderr);
         return header;
     }
     header.biSize          = *((unsigned*) (imstream + 14U));
@@ -230,7 +230,7 @@ static inline charbuf_t to_text(const bmp_t* const restrict image) {
     // a fullscreen cmd window is 215 chars wide and 50 chars high
     char* txtbuff = malloc((image->infhead.biHeight * image->infhead.biWidth + image->infhead.biHeight) * sizeof(char));
     if (!txtbuff) {
-        fwprintf_s(stderr, L"Error in %s @ line %d: malloc failed!\n", __FUNCTIONW__, __LINE__);
+        fprintf(stderr, "Error in %s @ line %d: malloc failed!\n", __FUNCTION__, __LINE__);
         return (charbuf_t) { nullptr, 0 };
     }
 
@@ -269,7 +269,7 @@ int main(const int argc, char* argv[]) {
             }
 
         } else {
-            fwprintf_s(stderr, L"Skipping image %s\n", argv[i]);
+            fprintf(stderr, "Skipping image %s\n", argv[i]);
             continue;
         }
     }

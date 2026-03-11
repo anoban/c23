@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-static inline void __attribute__((__always_inline__)) __compiler() {
+static inline void __attribute__((__always_inline__)) compiler() {
 #if defined(__INTEL_LLVM_COMPILER)
     printf("__INTEL_LLVM_COMPILER = %d\n", __INTEL_LLVM_COMPILER);
 #endif
@@ -22,7 +22,7 @@ int main(void) {
     puts("GCC");
 #endif
 
-    __compiler();
+    compiler();
 
     return EXIT_SUCCESS;
 }
