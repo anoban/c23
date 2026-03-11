@@ -1,15 +1,19 @@
 GCC = /usr/bin/gcc
+
 CLANG = /usr/bin/clang
+
 ICX = /opt/intel/oneapi/compiler/latest/bin/icx
 
-TARGET_NO_EXTENSION = asciiart
+DEBUG = -DDEBUG -D_DEBUG -g3
 
-SOURCE_EXTENSION = c
+NODEBUG = -NDEBUG -N_DEBUG -g0
 
-FLAGS = -std=c23 -fstrict-flex-arrays -fdiagnostics-show-location=every-line -fdiagnostics-color -Wall -Wextra -Wpedantic
+CFLAGS = -std=c23 -fstrict-flex-arrays -fdiagnostics-show-location=every-line -fdiagnostics-color -Wall -Wextra -Wpedantic
+
+TARGET:
 
 build:
-	$(GCC) $(TARGET_NO_EXTENSION).$(SOURCE_EXTENSION) $(FLAGS) -o $(TARGET_NO_EXTENSION).out
+	$(GCC) $(TARGET).c $(CFLAGS) $(NODEBUG) -o $(TARGET).out
 
 .PHONY: clean
 
