@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <wchar.h>
 
-int wmain(_In_opt_ const int argc, _In_opt_count_(argc) const wchar_t* const argv[]) {
-    wprintf_s(L"argc = %d\n", argc);
-    for (int i = 0; i < argc; ++i) wprintf_s(L"Argument no %d: %s\n", i, argv[i]);
+int wmain(const int argc, const wchar_t* const argv[]) {
+    wprintf(L"argc = %d\n", argc);
+    for (int i = 0; i < argc; ++i) wprintf(L"Argument no %d: %s\n", i, argv[i]);
     return EXIT_SUCCESS;
 }

@@ -1,26 +1,29 @@
 #include <stdalign.h>
 #include <stdbool.h>
-#include <stdint.h>
+#include <stdio.h>
 #include <wchar.h>
 
 struct align {
         bool               first;
-        int16_t            second;
+        short              second;
         double             third;
         char               fourth;
         unsigned long long fifth;
 };
 
-__declspec(align(32)) struct align_ {
+// https://stackoverflow.com/questions/14332633/attribute-packed-v-s-gcc-attribute-alignedx
+struct aligned16 {
         bool               first;
-        int16_t            second;
+        short              second;
         double             third;
         char               fourth;
         unsigned long long fifth;
-};
+} __attribute__((aligned(16)));
 
 int main(void) {
     alignof(struct align);
-    wprintf_s(L"Hi there %s\n", L"Anoban");
+    __alignof(struct aligned16);
+    __alignof__(struct align);
+    printf("Hi there %s\n", "Anoban");
     return 0;
 }

@@ -15,6 +15,7 @@
                 "-D__STDC_WANT_SECURE_LIB__",
                 "-I./",
                 "-I./include/",
+                "-std:c23",
                 "-Wall",
                 "-Wextra",
                 "-Wpedantic",

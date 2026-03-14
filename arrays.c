@@ -1,7 +1,7 @@
 #include <stdint.h>
 #include <stdio.h>
 
-long double signed_array_sum(char* array, unsigned long long size, uint8_t stride) {
+long double signed_array_sum(char* array, unsigned long long size, unsigned char stride) {
     long double sum = 0.0;
 
     switch (stride) {
@@ -13,21 +13,21 @@ long double signed_array_sum(char* array, unsigned long long size, uint8_t strid
             }
             break;
         case 4 :
-             int* i32array = ( int*) array;
+            int* i32array = (int*) array;
             for (unsigned long long i = 0; i < size; ++i) {
                 sum += *i32array;
                 i32array++;
             }
             break;
         case 2 :
-             short* i16array = ( short*) array;
+            short* i16array = (short*) array;
             for (unsigned long long i = 0; i < size; ++i) {
                 sum += *i16array;
                 i16array++;
             }
             break;
         case 1 :
-             unsigned char* i8array = ( unsigned char*) array;
+            unsigned char* i8array = (unsigned char*) array;
             for (unsigned long long i = 0; i < size; ++i) {
                 sum += *i8array;
                 i8array++;
